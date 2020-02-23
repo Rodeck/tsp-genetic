@@ -15,7 +15,7 @@ namespace TSP
             this.y = y;
         }
 
-        // Functionality
+        // Calculate distance to another city.
         public double DistanceTo(City c)
         {
             return Math.Sqrt(Math.Pow((c.x - x), 2)

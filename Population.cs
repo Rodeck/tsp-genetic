@@ -6,8 +6,10 @@ namespace TSP
     public class Population
     {
 
-        // Member variables
+        // Represents tour
         public List<Tour> p { get; private set; }
+
+
         public double maxFit { get; private set; }
 
         // ctor
@@ -28,6 +30,7 @@ namespace TSP
             return new Population(tmp);
         }
 
+        /// calculate max fitness
         private double CalcMaxFit()
         {
             return p.Max( t => t.fitness );
@@ -44,6 +47,7 @@ namespace TSP
             }
         }
 
+        // Generate new population
         public Population GenNewPop(int n)
         {
             List<Tour> p = new List<Tour>();
@@ -61,6 +65,7 @@ namespace TSP
             return new Population(p);
         }
 
+        // Get n elite members.
         public Population Elite(int n)
         {
             List<Tour> best = new List<Tour>();
@@ -75,6 +80,7 @@ namespace TSP
             return new Population(best);
         }
 
+        // get tour with best fitness.
         public Tour FindBest()
         {
             foreach (Tour t in this.p)
@@ -87,10 +93,16 @@ namespace TSP
             return null;
         }
 
+        // evolve population
         public Population Evolve()
         {
+            // get elite members
             Population best = Elite(Env.elitism);
+
+            // generate rest population
             Population np = GenNewPop(Env.popSize - Env.elitism);
+
+            // concat elite with rest of population
             return new Population( best.p.Concat(np.p).ToList() );
         }
     }

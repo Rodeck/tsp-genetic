@@ -5,10 +5,16 @@ namespace TSP
 {
     public class Tour
     {
+        // list of cities
         public List<City> t { get; private set; }
+
+        // total distance between the cities
         public double distance { get; private set; }
+
+        // fitness value
         public double fitness { get; private set; }
 
+        // ctor
         public Tour(List<City> l)
         {
             t = l;
@@ -16,6 +22,7 @@ namespace TSP
             fitness = CalcDist();
         }
 
+        // generates new random tour
         public static Tour Random(int n)
         {
             List<City> t = new List<City>();
@@ -26,6 +33,7 @@ namespace TSP
             return new Tour(t);
         }
 
+        // shuffle cities in tour
         public Tour Shuffle()
         {
             List<City> tmp = new List<City>(this.t);
@@ -43,12 +51,19 @@ namespace TSP
             return new Tour(tmp);
         }
 
+        // crossover tour
         public Tour Crossover(Tour m)
         {
             int i = Program.r.Next(0, m.t.Count);
             int j = Program.r.Next(i, m.t.Count);
+
+            // take cities from i index to j
             List<City> s = this.t.GetRange(i, j - i + 1);
+
+            // take rest of the cities
             List<City> ms = m.t.Except(s).ToList();
+
+            // generate list with new cities
             List<City> c = ms.Take(i)
                              .Concat(s)
                              .Concat( ms.Skip(i) )
@@ -56,12 +71,15 @@ namespace TSP
             return new Tour(c);
         }
 
+        // mutate tour
         public Tour Mutate()
         {
             List<City> tmp = new List<City>(this.t);
 
+            // check if should mutate based on mutation ratio
             if (Program.r.NextDouble() < Env.mutRate)
             {
+                // swap two cities
                 int i = Program.r.Next(0, this.t.Count);
                 int j = Program.r.Next(0, this.t.Count);
                 City v = tmp[i];
@@ -72,6 +90,7 @@ namespace TSP
             return new Tour(tmp);
         }
 
+        // calculate total distance
         private double CalcDist()
         {
             double total = 0;
